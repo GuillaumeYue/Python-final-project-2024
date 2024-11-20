@@ -46,12 +46,12 @@ def user_register():
         username = request.form.get('username')
         password = request.form.get('password')
         if username == '' or password == '':
-            js_code = "<script>alert('请输入账号密码！'); history.back();</script>"
+            js_code = "<script>alert('ENter Username & Password！'); history.back();</script>"
             return js_code
 
         user = get_user_by_username(username)
         if user:
-            js_code = "<script>alert('用户已存在！'); history.back();</script>"
+            js_code = "<script>alert('User already exists！'); history.back();</script>"
             return js_code
         else:
             register_db(username, password)
@@ -86,14 +86,14 @@ def user_login():
         password = request.form.get('password')
 
         if not username or not password:
-            js_code = "<script>alert('请输入账号密码！'); history.back();</script>"
+            js_code = "<script>alert('Enter Username & Password！'); history.back();</script>"
             return js_code
 
         user = get_user_by_username(username)
         if user and user['password'] == password:
             return redirect(url_for('admin'))
         else:
-            js_code = "<script>alert('登录失败！'); history.back();</script>"
+            js_code = "<script>alert('Login Failed！'); history.back();</script>"
             return js_code
 
 
@@ -107,27 +107,35 @@ def admin():
 def home():
     db = pymysql.connect(host=dbhost, user=dbuser, password=dbpass, database=dbname)
     cursor = db.cursor()
-    query = "select sex, count(*) from student group by sex"
+    query = "select gender, count(*) from student group by gender"
     cursor.execute(query)
     data = cursor.fetchall()
-    # 将查询结果转换为列表形式
     gender_data = [{'gender': row[0], 'count': row[1]} for row in data]
     cursor.close()
     db.close()
+
     # 提取性别列表和数量列表
     genders = [row['gender'] for row in gender_data]
     counts = [row['count'] for row in gender_data]
     explode = [0.1, 0]
+
+    # 清除旧图
+    plt.clf()
+
     # 创建饼图
     matplotlib.rcParams['font.sans-serif'] = ['SimHei']
     plt.pie(counts, labels=genders, autopct='%1.1f%%', explode=explode, shadow=True,
             textprops={'fontsize': 16, 'color': 'white'})
     plt.axis('equal')
+
     # 保存饼图为图片
     chart_path = 'static/chart.png'
     plt.savefig(chart_path, transparent=True)
+    plt.close()  # 关闭绘图
+
     # 渲染模板并传递饼图路径
     return render_template('home.html', chart_path=chart_path)
+
 
 
 @app.route('/add', methods=['GET', 'POST'])  # 添加学生
@@ -137,24 +145,24 @@ def add():
     else:
         id = request.form.get('id')
         name = request.form.get('name')
-        sex = request.form.get('sex')
+        gender = request.form.get('gender')
         age = request.form.get('age')
         stu = getStudent(id)
-        if id == "" or name == "" or sex == "" or age == "":
-            js_code = "<script>alert('请填写完整信息！'); history.back();</script>"
+        if id == "" or name == "" or gender == "" or age == "":
+            js_code = "<script>alert('Enter complete information！'); history.back();</script>"
             return js_code
         elif stu:
-            js_code = "<script>alert('学生已存在！'); history.back();</script>"
+            js_code = "<script>alert('Student Already Exists！'); history.back();</script>"
             return js_code
         else:
-            addstudent(id, name, sex, age)
+            addstudent(id, name, gender, age)
             return redirect(url_for('admin'))
 
 
-def addstudent(id, name, sex, age):
+def addstudent(id, name, gender, age):
     db = pymysql.connect(host=dbhost, user=dbuser, password=dbpass, database=dbname)
     cursor = db.cursor()
-    sql = "insert into student (id,name,sex,age) values ('" + id + "','" + name + "','" + sex + "','" + age + "')"
+    sql = "insert into student (id,name,gender,age) values ('" + id + "','" + name + "','" + gender + "','" + age + "')"
     cursor.execute(sql)
     db.commit()
     db.close()
@@ -187,7 +195,7 @@ def search():
         students1 = searchstu1(id)
         return render_template('admin.html', student=students1)
     elif request.form.get('id') == '' and request.form.get('name') == '':
-        js_code = "<script>alert('请输入查询内容！'); history.back();</script>"
+        js_code = "<script>alert('Enter Search Content！'); history.back();</script>"
         return js_code
 
 
@@ -222,26 +230,26 @@ def modify(id):
         editStudent = getStudent(id)
         id = editStudent[0]
         name = editStudent[1]
-        sex = editStudent[2]
+        gender = editStudent[2]
         age = editStudent[3]
-        return render_template('modify.html', students=students, id=id, name=name, sex=sex, age=age)
+        return render_template('modify.html', students=students, id=id, name=name, gender=gender, age=age)
     else:
         id = request.form.get('id')
         name = request.form.get('name')
-        sex = request.form.get('sex')
+        gender = request.form.get('gender')
         age = request.form.get('age')
-        if name == '' or sex == '' or age == '':
-            js_code = "<script>alert('请输入修改信息！'); history.back();</script>"
+        if name == '' or gender == '' or age == '':
+            js_code = "<script>alert('Enter Modified Information！'); history.back();</script>"
             return js_code
         else:
-            updateStudent(id, name, sex, age)
+            updateStudent(id, name, gender, age)
             return redirect(url_for('admin'))
 
 
-def updateStudent(id, name, sex, age):
+def updateStudent(id, name, gender, age):
     db = pymysql.connect(host=dbhost, user=dbuser, password=dbpass, database=dbname)
     cursor = db.cursor()
-    sql = "update student set name='%s',sex='%s', age='%s' WHERE id=%s" % (name, sex, age, id)
+    sql = "update student set name='%s',gender='%s', age='%s' WHERE id=%s" % (name, gender, age, id)
     cursor.execute(sql)
     print(sql)
     db.commit()

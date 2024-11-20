@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>学生信息管理</title>
+    <title>Student Information Management</title>
     <link rel="stylesheet" href="../static/css/bootstrap.css">
 </head>
 
@@ -12,13 +12,13 @@
         <div class="col">
             <ul class="nav flex-column " style="width: 120px; margin: 40px auto">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/admin">管理功能</a>
+                    <a class="nav-link active" aria-current="page" href="/admin">Management Function</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/home">可视化功能</a>
+                    <a class="nav-link" href="/home">Visible Function</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login" >退出登录</a>
+                    <a class="nav-link" href="/login" >Exit</a>
                 </li>
             </ul>
         </div>
@@ -29,36 +29,36 @@
                     <th scope="col">
                         <form action="/search" class="row g-3" method="post">
                             <div class="col-auto">
-                                <label class="visually-hidden">学号</label>
-                                <input type="text" class="form-control" name="id" placeholder="学号">
+                                <label class="visually-hidden">StudentId</label>
+                                <input type="text" class="form-control" name="id" placeholder="studentId">
                             </div>
                             <div class="col-auto">
-                                <label class="visually-hidden">姓名</label>
-                                <input type="text" class="form-control" name="name" placeholder="姓名">
+                                <label class="visually-hidden">Name</label>
+                                <input type="text" class="form-control" name="name" placeholder="name">
                             </div>
                             <div class="col-auto">
-                                <button type="submit" class="btn btn-outline-success mb-3">查找</button>
+                                <button type="submit" class="btn btn-outline-success mb-3">Search</button>
                             </div>
                         </form>
                     </th>
                     <th scope="col">
                         <form action="/add" class="row g-3">
                             <div class="col-auto">
-                                <button type="submit" class="btn btn-outline-info mb-3">添加学生</button>
+                                <button type="submit" class="btn btn-outline-info mb-3">Add</button>
                             </div>
                         </form>
                     </th>
                     <th scope="col">
                         <form action="/sort" class="row g-3">
                             <div class="col-auto">
-                                <button type="submit" class="btn btn-outline-info mb-3">排序</button>
+                                <button type="submit" class="btn btn-outline-info mb-3">Sort</button>
                             </div>
                         </form>
                     </th>
                     <th scope="col">
                         <form action="/admin" class="row g-3">
                             <div class="col-auto">
-                                <button type="submit" class="btn btn-outline-info mb-3">返回</button>
+                                <button type="submit" class="btn btn-outline-info mb-3">Back</button>
                             </div>
                         </form>
                     </th>
@@ -70,11 +70,11 @@
                             <table class="table table-hover" style="width: 900px; margin: 0 auto">
                                 <thead>
                                 <tr>
-                                    <th scope="col">学号</th>
-                                    <th scope="col">姓名</th>
-                                    <th scope="col">性别</th>
-                                    <th scope="col">年龄</th>
-                                    <th scope="col">操作</th>
+                                    <th scope="col">StudentId</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">Age</th>
+                                    <th scope="col">Manipulate</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -93,12 +93,12 @@
                                         <td>
                                             <form action="/delete/{{ stu[0] }}" method="get"
                                                   style="display: inline-block;">
-                                                <button type="submit" class="btn btn-outline-danger btn-sm">删除
+                                                <button type="submit" class="btn btn-outline-danger btn-sm">Delete
                                                 </button>
                                             </form>
                                             <form action="/modify/{{ stu[0] }}" method="get"
                                                   style="display: inline-block;">
-                                                <button type="submit" class="btn btn-outline-warning btn-sm">修改
+                                                <button type="submit" class="btn btn-outline-warning btn-sm">Modify
                                                 </button>
                                             </form>
                                         </td>
